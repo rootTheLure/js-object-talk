@@ -15,7 +15,6 @@ isFrozen
 isPrototypeOf
 isSealed
 keys
-length
 name
 preventExtensions
 propertyIsEnumerable
