@@ -41,3 +41,11 @@ section img.small {
 section img.medium {
 	max-height: 60%!important;
 }
+
+section .code {
+	font-family: monospace;
+}
+
+.reveal pre code {
+	max-height: 70%!important;
+}

@@ -45,48 +45,301 @@
                     </p>
                 </section>
                 <section>
-                    <h3>object</h3>
-                    <ul>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/constructor" target="_blank">constructor</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create" target="_blank">create</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" target="_blank">is</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype" target="_blank">prototype</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf" target="_blank">isPrototypeOf</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf" target="_blank">getPrototypeOf</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">keys</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toLocaleString" target="_blank">toLocaleString</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString" target="_blank">toString</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf" target="_blank">valueOf</a></li>
-                    </ul>
+                    <section>
+                        <h3>object</h3>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor" target="_blank">Object.prototype.constructor</a>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create" target="_blank">Object.create()</a>
+                        <pre><code class="javascript">
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+function Rectangle() {
+  Shape.call(this); // call super constructor.
+}
+
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
+
+var rect = new Rectangle();
+
+console.log(rect instanceof Rectangle); // true
+console.log(rect instanceof Shape); // true
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" target="_blank">is</a>
+                        <pre><code class="javascript">
+Object.is('foo', 'foo');     // true
+Object.is(window, window);   // true
+
+Object.is('foo', 'bar');     // false
+Object.is([], []);           // false
+
+var test = { a: 1 };
+Object.is(test, test);       // true
+
+Object.is(null, null);       // true
+
+// Special Cases
+Object.is(0, -0);            // false
+Object.is(-0, -0);           // true
+Object.is(NaN, 0/0);         // true
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank">Object.assign</a>
+                        <pre><code class="javascript">
+var obj = { a: 1 };
+var copy = Object.assign({}, obj);
+console.log(copy); // { a: 1 }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank">Object.assign</a>
+                        <pre><code class="javascript">
+var o1 = { a: 1 };
+var o2 = { b: 2 };
+var o3 = { c: 3 };
+
+var obj = Object.assign(o1, o2, o3);
+console.log(obj); // { a: 1, b: 2, c: 3 }
+console.log(o1);  // { a: 1, b: 2, c: 3 }, target object itself is changed.
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank">Object.assign</a>
+                        <pre><code class="javascript">
+var v1 = '123';
+var v2 = true;
+var v3 = 10;
+var v4 = Symbol('foo')
+
+var obj = Object.assign({}, v1, null, v2, undefined, v3, v4);
+// Primitives will be wrapped, null and undefined will be ignored.
+// Note, only string wrappers can have own enumerable properties.
+console.log(obj); // { "0": "1", "1": "2", "2": "3" }
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>properties</h3>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty()</a>
+                        <pre><code class="javascript">
+Object.defineProperty(
+    obj,
+    prop,
+    descriptor
+)
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty()</a>
+                        <pre><code class="javascript">
+var descriptor = {
+    configurable: false,
+    enumerable: false,
+    value: undefined,
+    writable: false,
+    get: function () { return this._prop; }, // default is undefined
+    set: function (value) {
+        this._prop = value;
+        console.log(value);
+        return value;
+    }
+};
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="javascript">
+var o = {}; // Creates a new object
+
+Object.defineProperty(o, 'a', {
+  value: 37,
+  writable: false
+});
+
+console.log(o.a); // logs 37
+o.a = 25; // throws in strict mode
+console.log(o.a); // logs 37. The assignment didn't work.
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="javascript">
+var o = {};
+Object.defineProperty(o, 'a', { value: 1, enumerable: true });
+Object.defineProperty(o, 'b', { value: 2, enumerable: false });
+Object.defineProperty(o, 'c', { value: 3 }); // enumerable defaults to false
+o.d = 4; // enumerable defaults to true
+         // when creating a property by setting it
+
+for (var i in o) {
+  console.log(i);
+}
+// logs 'a' and 'd' (in undefined order)
+
+Object.keys(o); // ['a', 'd']
+
+o.propertyIsEnumerable('a'); // true
+o.propertyIsEnumerable('b'); // false
+o.propertyIsEnumerable('c'); // false
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="javascript">
+var o = {};
+Object.defineProperty(o, 'a', {
+  get: function() { return 1; },
+  configurable: false
+});
+
+Object.defineProperty(o, 'a', { configurable: true }); // throws a TypeError
+Object.defineProperty(o, 'a', { enumerable: true }); // throws a TypeError
+
+Object.defineProperty(o, 'a', { set: function() {} });
+// throws a TypeError (set was undefined previously)
+
+Object.defineProperty(o, 'a', { get: function() { return 1; } });
+// throws a TypeError (even though the new get does exactly the same thing)
+
+Object.defineProperty(o, 'a', { value: 12 }); // throws a TypeError
+
+console.log(o.a); // logs 1
+delete o.a; // Nothing happens
+console.log(o.a); // logs 1
+                        </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="javascript">
+var obj = {};
+
+Object.defineProperty(obj, {
+    get: function () { return this._prop; },
+    set: function (value) {
+        this._prop = value;
+        console.log(value);
+        return value;
+    }
+};
+                        </code></pre>
+                    </section>
+                    <section>
+                        <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions" target="_blank">Object.preventExtensions()</a>
+                        <ul>
+                            <li class="fragment">marks an object as no longer extensible</li>
+                            <li class="fragment">attempting to add new properties will fail</li>
+                            <li class="fragment">that the properties may still be deleted</li>
+                            <li class="fragment">properties can still be added to the object prototype</li>
+                        </ul>
+                    </section>
+                    <section>
+                       <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal" target="_blank">Object.seal()</a>
+                        <ul>
+                            <li class="fragment">prevents new properties from being added</li>
+                            <li class="fragment">marks all existing properties as non-configurable</li>
+                            <li class="fragment">it does not prevent the values from being changed</li>
+                            <li class="fragment">attempting to delete or add properties will fail</li>
+                        </ul>
+                    </section>
+                    <section>
+                       <a class="code" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank">Object.freeze()</a>
+                        <ul>
+                            <li class="fragment">prevents new properties from being added</li>
+                            <li class="fragment">prevents existing properties from being removed</li>
+                            <li class="fragment">prevents existing properties from being changed</li>
+                            <li class="fragment">marks all existing properties as non-configurable</li>
+                            <li class="fragment">accessor properties (getters and setters) work the same </li>
+                        </ul>
+                    </section>
                 </section>
                 <section>
-                    <h3>properties</h3>
-                    <ul>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">defineProperty</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties" target="_blank">defineProperties</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions" target="_blank">preventExtensions</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal" target="_blank">seal</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank">freeze</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor" target="_blank">getOwnPropertyDescriptor</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames" target="_blank">getOwnPropertyNames</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty" target="_blank">hasOwnProperty</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/propertyIsEnumerable" target="_blank">propertyIsEnumerable</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isExtensible" target="_blank">isExtensible</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen" target="_blank">isFrozen</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed" target="_blank">isSealed</a></li>
-                    </ul>
+                    <section>
+                        <h3>Invocations</h3>
+                    </section>
+                    <section>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank">Function.prototype.call()</a>
+                        <pre><code class="javascript">function Product(name, price) {
+  this.name = name;
+  this.price = price;
+}
+
+function Food(name, price) {
+  Product.call(this, name, price);
+  this.category = 'food';
+}
+
+Food.prototype = Object.create(Product.prototype);
+// Reset the constructor from Product to Food
+Food.prototype.constructor = Food;
+
+function Toy(name, price) {
+  Product.call(this, name, price);
+  this.category = 'toy';
+}
+
+Toy.prototype = Object.create(Product.prototype);
+
+// Reset the constructor from Product to Toy
+Toy.prototype.constructor = Toy;
+
+var cheese = new Food('feta', 5);
+var fun = new Toy('robot', 40);</code></pre>
+                    </section>
+                    <section>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank">Function.prototype.apply()</a>
+                        <pre><code class="javascript">/* min/max number in an array */
+var numbers = [5, 6, 2, 3, 7];
+
+/* using Math.min/Math.max apply */
+var max = Math.max.apply(null, numbers);
+var min = Math.min.apply(null, numbers);
+/* This about equal to Math.max(numbers[0], ...)
+or Math.max(5, 6, ...) */
+
+
+/* vs. simple loop based algorithm */
+max = -Infinity, min = +Infinity;
+
+for (var i = 0; i < numbers.length; i++) {
+  if (numbers[i] > max) {
+    max = numbers[i];
+  }
+  if (numbers[i] < min) {
+    min = numbers[i];
+  }
+}</code></pre>
+                    </section>
+                    <section>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank">Function.prototype.bind()</a>
+                        <pre><code class="javascript">this.x = 9;
+var module = {
+  x: 81,
+  getX: function() { return this.x; }
+};
+
+module.getX(); // 81
+
+var retrieveX = module.getX;
+retrieveX(); // 9, because in this case, "this" refers to the global object
+
+// Create a new function with 'this' bound to module
+// New programmers (like myself) might confuse
+// the global var getX with module's property getX
+var boundGetX = retrieveX.bind(module);
+boundGetX(); // 81</code></pre>
+                    </section>
                 </section>
-                <section>
-                    <h3>Invocations</h3>
-                    <ul>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments" target="_blank">argument</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank">apply</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank">call</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank">bind</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/caller" target="_blank">caller</a></li>
-                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name" target="_blank">name</a></li>
-                    </ul>
                 </section>
+
                 <section>
                     <h1>Thank you</h1>
                 </section>
